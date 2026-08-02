@@ -1,0 +1,25 @@
+model_list:
+  - model_name: jp.claude-sonnet-4-6
+    litellm_params:
+      model: jp.anthropic.claude-sonnet-4-6
+      aws_region_name: ap-northeast-1
+      api_key: os.environ/AWS_BEARER_TOKEN_BEDROCK
+
+  - model_name: jp.claude-opus-4-8
+    litellm_params:
+      model: bedrock/jp.anthropic.claude-opus-4-8
+      aws_region_name: ap-northeast-1
+      api_key: os.environ/AWS_BEARER_TOKEN_BEDROCK
+
+  - model_name: jp.claude-haiku-4-5
+    litellm_params:
+      model: jp.anthropic.claude-haiku-4-5-20251001-v1:0
+      aws_region_name: ap-northeast-1
+      api_key: os.environ/AWS_BEARER_TOKEN_BEDROCK
+
+  - model_name: jp.amazon.nova-2-lite
+    litellm_params:
+      model: bedrock/jp.amazon.nova-2-lite-v1:0
+      aws_region_name: ap-northeast-1
+      api_key: os.environ/AWS_BEARER_TOKEN_BEDROCK
+

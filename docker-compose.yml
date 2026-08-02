@@ -1,0 +1,87 @@
+services:
+  litellm:
+    image: ghcr.io/berriai/litellm:main-stable
+    container_name: litellm
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./litellm-config.yaml:/app/config.yaml
+    environment:
+      - AWS_BEARER_TOKEN_BEDROCK=${AWS_API_KEY}
+      - AWS_REGION=ap-northeast-1
+      - AWS_DEFAULT_REGION=ap-northeast-1
+    command:
+      - "--config"
+      - "/app/config.yaml"
+    networks:
+      - app-net
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: unless-stopped
+    ports:
+      - "3000:8080"
+    volumes:
+      - ./data:/app/backend/data
+    environment:
+      - OPENAI_API_BASE_URL=http://litellm:4000/v1
+      - OPENAI_API_KEY=dummy
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
+      - WEBUI_URL=http://10.11.196.84:3000
+    networks:
+      - app-net
+
+  docling:
+    image: ghcr.io/docling-project/docling-serve-cpu:latest
+    container_name: docling
+    restart: unless-stopped
+    environment:
+      - UVICORN_WORKERS=1
+      - DOCLING_SERVE_ENABLE_UI=false
+      - DOCLING_SERVE_MAX_SYNC_WAIT=300
+    networks:
+      - app-net
+
+  github-mcp:
+    image: ghcr.io/github/github-mcp-server:latest
+    container_name: github-mcp
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    environment:
+      GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PAT}
+    command:
+      - http
+      - --port
+      - "8082"
+      - --read-only
+    networks:
+      - app-net
+
+  gitlab-mcp:
+    image: gitlab-mcp:latest
+    container_name: gitlab-mcp
+    restart: unless-stopped
+    volumes:
+      - ./gitlab-mcp/glab-cli:/root/.config/glab-cli
+    ports:
+      - "8083:8083"
+    networks:
+      - app-net
+
+  gitlab-mcp-readonly:
+    build:
+      context: ./gitlab-mcp-readonly
+    container_name: gitlab-mcp-readonly
+    restart: unless-stopped
+    ports:
+      - "8084:8084"
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    driver: bridge
+

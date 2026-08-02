@@ -1,0 +1,9 @@
+host: dmzmlcalc-01.spring8.or.jp
+hosts:
+    dmzmlcalc-01.spring8.or.jp:
+        api_host: dmzmlcalc-01.spring8.or.jp/gitlab
+        api_protocol: http
+        git_protocol: ssh
+last_seen_version: v1.109.0
+last_update_check_timestamp: "2026-07-29T10:07:02Z"
+
