@@ -1,6 +1,6 @@
 services:
   litellm:
-    image: ghcr.io/berriai/litellm:main-stable
+    image: ghcr.io/berriai/litellm:v1.94.1
     container_name: litellm
     restart: unless-stopped
     ports:
@@ -18,7 +18,7 @@ services:
       - app-net
 
   open-webui:
-    image: ghcr.io/open-webui/open-webui:main
+    image: ghcr.io/open-webui/open-webui:v0.11.0
     container_name: open-webui
     restart: unless-stopped
     ports:
@@ -34,7 +34,7 @@ services:
       - app-net
 
   docling:
-    image: ghcr.io/docling-project/docling-serve-cpu:latest
+    image: ghcr.io/docling-project/docling-serve-cu130:v1.29.0
     container_name: docling
     restart: unless-stopped
     environment:
@@ -45,7 +45,7 @@ services:
       - app-net
 
   github-mcp:
-    image: ghcr.io/github/github-mcp-server:latest
+    image: ghcr.io/github/github-mcp-server:v1.8.0
     container_name: github-mcp
     restart: unless-stopped
     ports:
