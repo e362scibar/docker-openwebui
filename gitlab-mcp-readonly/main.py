@@ -7,17 +7,8 @@ import httpx
 UPSTREAM = "http://gitlab-mcp:8083"
 
 ALLOWED_PATHS = {
-    #"glab_ci_artifact",
-    #"glab_ci_trace",
-    #"glab_issue_list",
-    #"glab_issue_view",
-    #"glab_mr_diff",
-    #"glab_mr_issues",
-    #"glab_mr_list",
-    #"glab_repo_list",
-    #"glab_repo_search",
-    #"glab_repo_view",
-    "glab_api"
+    "glab_api",
+    "glab_repo_view",
 }
 
 app = FastAPI(
@@ -51,6 +42,8 @@ async def proxy(path: str, request: Request):
         )
 
     if path == "glab_api":
+        body = await request.body()
+
         try:
             data = json.loads(body.decode())
         except Exception:
@@ -67,10 +60,10 @@ async def proxy(path: str, request: Request):
                 },
                 status_code=403,
             )
+    else:
+        body = await request.body()
 
     async with httpx.AsyncClient() as client:
-
-        body = await request.body()
 
         response = await client.request(
             request.method,
